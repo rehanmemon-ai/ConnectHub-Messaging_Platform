@@ -1,5 +1,16 @@
 # ConnectHub Project Handoff
 
+## Current publication update — 2026-11-17
+
+The final QA closeout is published on the existing public `main` branch. Current release commit: [`ed9370a1b38d09f1ad4e792b1bc7fb024118a306`](https://github.com/rehanmemon-ai/ConnectHub-Messaging_Platform/commit/ed9370a1b38d09f1ad4e792b1bc7fb024118a306). This supersedes the earlier snapshot below that described the closeout as uncommitted and local-only.
+
+GitHub Actions run [#4](https://github.com/rehanmemon-ai/ConnectHub-Messaging_Platform/actions/runs/44145471759) passed backend and browser E2E jobs. Frontend lint, typecheck, 21 tests and production build passed; the job stopped at full `npm audit` because of 12 high-severity development-tooling findings. A follow-up workflow change makes `npm audit --omit=dev` the blocking production dependency gate while retaining the full audit visibly as a non-blocking report. The new workflow result must be checked before claiming CI success.
+
+The release includes the QA corrections, eight selected GitHub-visible screenshots, updated model configuration, evaluation fixes and case-study documentation. AI remains disabled in production. Live Gemini evaluation, both requested videos and an isolated database restore rehearsal remain NOT RUN/BLOCKED as documented.
+
+The deployment status of this commit on both Render services has not been independently verified here. Confirm that the existing frontend and backend services are Live on the intended release commit before describing the updated favicon or frontend fixes as publicly deployed. No production database change or Render environment-variable change is authorised by this handoff update.
+
+
 ## Authoritative current snapshot — 2026-11-17 final QA closeout
 
 This section supersedes contradictory historical status statements later in this append-only handoff. Historical milestone text is retained for traceability.

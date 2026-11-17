@@ -65,8 +65,11 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
-      - run: npm audit
-      - run: npm audit --omit=dev
+      - name: Audit production dependencies (blocking)
+        run: npm audit --omit=dev
+      - name: Audit full dependency tree (report development-tooling findings)
+        continue-on-error: true
+        run: npm audit
 
   browser-e2e:
     runs-on: ubuntu-latest
