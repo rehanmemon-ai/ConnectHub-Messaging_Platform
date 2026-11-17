@@ -1,0 +1,34 @@
+import { useState } from "react";
+
+import { api, errorMessage } from "../../lib/api";
+import { useAsync } from "../../lib/useAsync";
+import type { JoinedRoom, Page, Room } from "../../types/api";
+import { Badge, Button, EmptyState, Field, Modal, Skeleton } from "../../components/ui/primitives";
+import { Icon } from "../../components/ui/Icon";
+import { Link, navigate } from "../../app/router";
+import { useToast } from "../../app/ToastContext";
+
+function RoomTile({ room, role, onJoin }: { room: Room; role?: string; onJoin?: () => void }) {
+  return <article className="room-list-card"><span className="room-icon"><Icon name={room.visibility === "private" ? "lock" : "globe"}/></span><div className="room-list-content"><div><h3>{room.name}</h3><div className="badge-row"><Badge>{room.visibility}</Badge>{role ? <Badge tone={role === "owner" ? "accent" : "neutral"}>{role}</Badge> : null}</div></div><p>{room.description || "No description yet."}</p></div>{room.membership ? <Link className="button button-secondary" to={`/app/rooms/${room.id}`}>Open</Link> : onJoin ? <Button onClick={onJoin}>Join room</Button> : null}</article>;
+}
+
+function CreateRoomModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const toast = useToast(); const [name, setName] = useState(""); const [description, setDescription] = useState(""); const [visibility, setVisibility] = useState<"public" | "private">("public"); const [busy, setBusy] = useState(false); const [error, setError] = useState("");
+  async function submit(event: React.FormEvent) { event.preventDefault(); setError(""); if (!name.trim() || name.trim().length > 100) { setError("Room name must be 1–100 characters."); return; } if (description.trim().length > 500) { setError("Description cannot exceed 500 characters."); return; } setBusy(true); try { const result = await api<{ room: Room }>("/api/v1/rooms", { method: "POST", body: { name, description, visibility } }); toast("Room created.", "success"); onClose(); navigate(`/app/rooms/${result.room.id}`); } catch (reason) { setError(errorMessage(reason)); } finally { setBusy(false); } }
+  return <Modal description="Create a public room anyone can discover, or a private room available by invitation." onClose={onClose} open={open} title="Create a room"><form className="form-stack" onSubmit={submit}><Field label="Room name"><input maxLength={100} onChange={(e) => setName(e.target.value)} value={name}/></Field><Field hint={`${description.length}/500`} label="Description"><textarea maxLength={500} onChange={(e) => setDescription(e.target.value)} rows={3} value={description}/></Field><fieldset className="choice-group"><legend>Visibility</legend><label className={visibility === "public" ? "choice active" : "choice"}><input checked={visibility === "public"} name="visibility" onChange={() => setVisibility("public")} type="radio"/><Icon name="globe"/><span><strong>Public</strong><small>Discoverable by anyone</small></span></label><label className={visibility === "private" ? "choice active" : "choice"}><input checked={visibility === "private"} name="visibility" onChange={() => setVisibility("private")} type="radio"/><Icon name="lock"/><span><strong>Private</strong><small>Invitation only</small></span></label></fieldset>{error ? <div className="notice notice-error" role="alert">{error}</div> : null}<div className="modal-actions"><Button onClick={onClose} type="button" variant="ghost">Cancel</Button><Button busy={busy} type="submit">Create room</Button></div></form></Modal>;
+}
+
+export function MyRoomsPage() {
+  const [create, setCreate] = useState(false); const rooms = useAsync((signal) => api<Page<JoinedRoom>>("/api/v1/users/me/rooms?limit=100", { signal }), []);
+  return <div className="page-stack"><div className="page-heading"><div><p className="eyebrow">Your spaces</p><h1>My rooms</h1><p>Every community you own or have joined.</p></div><Button onClick={() => setCreate(true)}><Icon name="plus"/> Create room</Button></div><section className="section-card">{rooms.loading ? <Skeleton lines={5}/> : rooms.error ? <div className="inline-error">{errorMessage(rooms.error)} <button onClick={rooms.reload}>Retry</button></div> : rooms.data?.items.length ? <div className="room-list">{rooms.data.items.map(({ room, role }) => <RoomTile key={room.id} role={role} room={room}/>)}</div> : <EmptyState icon="chat" title="No rooms yet" description="Discover a public room or create one for your community." action={<Button onClick={() => setCreate(true)}>Create a room</Button>}/>}</section><CreateRoomModal onClose={() => setCreate(false)} open={create}/></div>;
+}
+
+export function DiscoverPage() {
+  const toast = useToast(); const [query, setQuery] = useState(""); const [search, setSearch] = useState(""); const [cursor, setCursor] = useState<string | null>(null); const [pages, setPages] = useState<Room[]>([]);
+  const rooms = useAsync((signal) => api<Page<Room>>(`/api/v1/rooms?limit=20${search ? `&search=${encodeURIComponent(search)}` : ""}${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`, { signal }), [search, cursor]);
+  const items = cursor ? [...pages, ...(rooms.data?.items ?? [])] : (rooms.data?.items ?? []);
+  async function join(room: Room) { try { await api(`/api/v1/rooms/${room.id}/membership`, { method: "POST" }); toast(`Joined ${room.name}.`, "success"); rooms.reload(); } catch (reason) { toast(errorMessage(reason), "error"); } }
+  function more() { if (!rooms.data?.next_cursor) return; setPages(items); setCursor(rooms.data.next_cursor); }
+  function submit(event: React.FormEvent) { event.preventDefault(); setPages([]); setCursor(null); setSearch(query.trim()); }
+  return <div className="page-stack"><div className="page-heading"><div><p className="eyebrow">Find your people</p><h1>Discover rooms</h1><p>Browse public conversations and join when one feels right.</p></div></div><form className="search-bar" onSubmit={submit}><Icon name="search"/><label className="sr-only" htmlFor="room-search">Search rooms</label><input id="room-search" maxLength={100} onChange={(e) => setQuery(e.target.value)} placeholder="Search by room name…" value={query}/><Button type="submit" variant="secondary">Search</Button></form><section className="section-card">{rooms.loading && !cursor ? <Skeleton lines={6}/> : rooms.error ? <div className="inline-error">{errorMessage(rooms.error)} <button onClick={rooms.reload}>Retry</button></div> : items.length ? <><div className="room-list">{items.map((room) => <RoomTile key={room.id} onJoin={() => join(room)} room={room}/>)}</div>{rooms.data?.next_cursor ? <div className="load-more"><Button busy={rooms.loading} onClick={more} variant="secondary">Load more</Button></div> : null}</> : <EmptyState icon="search" title="No public rooms found" description={search ? "Try a different room name." : "Be the first to create a public room."}/>}</section></div>;
+}

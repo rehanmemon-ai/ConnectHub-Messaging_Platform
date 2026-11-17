@@ -1,0 +1,3 @@
+# ADR 004: JSONB bounded cosine ranking
+
+**Context.** The local PostgreSQL installation has no pgvector and the pilot corpus is small. **Options.** JSONB and application cosine, pgvector, hosted vector database, or text-only search. **Decision.** Store profiled vectors as JSONB, select the newest bounded room candidates, and rank that subset exactly in Python. **Consequences.** Portable and inspectable, but recency-biased, CPU-bound, and not global nearest-neighbor search. Response metadata exposes candidate truncation. **Evidence.** AI service and synthetic benchmark. **Revisit when.** Candidate recall, latency, or corpus size fails an approved threshold; then evaluate pgvector with measured migration benefit.

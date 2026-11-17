@@ -1,0 +1,3 @@
+# ADR 005: Optional Gemini provider
+
+**Context.** Summaries and semantic search are optional external processing; normal chat must work without a key. **Options.** Hard-wire Gemini, disable AI entirely, or use a small provider protocol. **Decision.** Use an internal provider protocol, keep `AI_ENABLED=false`, and require separate automatic-indexing/backfill opt-ins. **Consequences.** Privacy-safe defaults and test doubles; provider-specific payloads remain isolated. Enabling a provider is an operator/privacy decision, not user consent. **Evidence.** settings, provider tests, privacy document. **Revisit when.** A second provider or self-hosted model has a measured quality/privacy/cost advantage.

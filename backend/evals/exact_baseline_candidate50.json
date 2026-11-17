@@ -1,0 +1,665 @@
+{
+  "dataset_version": "connecthub-synthetic-retrieval-v1",
+  "system": "literal_case_insensitive_substring_baseline",
+  "semantic_model": null,
+  "semantic_quality_status": "NOT_RUN",
+  "message_count": 120,
+  "query_count": 60,
+  "k": 5,
+  "candidate_limit": 50,
+  "metrics": {
+    "precision": 0.05333333333333334,
+    "recall": 0.08888888888888888,
+    "reciprocal_rank": 0.23333333333333334,
+    "ndcg": 0.0582592590242345,
+    "average_precision": 0.08888888888888888
+  },
+  "latency_ms": {
+    "mean": 0.008268332991671437,
+    "max": 0.0278999941656366
+  },
+  "per_query": [
+    {
+      "query_id": "q-database-index-exact",
+      "category": "exact",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": [
+        "m-ai-privacy-06",
+        "m-read-receipt-06",
+        "m-owner-lock-06",
+        "m-summary-cache-06",
+        "m-embedding-profile-06"
+      ]
+    },
+    {
+      "query_id": "q-database-index-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-database-index-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-database-index-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": [
+        "m-ai-privacy-06",
+        "m-read-receipt-06",
+        "m-owner-lock-06",
+        "m-summary-cache-06",
+        "m-embedding-profile-06"
+      ]
+    },
+    {
+      "query_id": "q-session-expiry-exact",
+      "category": "exact",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-session-expiry-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-session-expiry-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-session-expiry-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-websocket-heartbeat-exact",
+      "category": "exact",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-websocket-heartbeat-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-websocket-heartbeat-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-websocket-heartbeat-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-private-invite-exact",
+      "category": "exact",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-private-invite-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-private-invite-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-private-invite-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-backup-restore-exact",
+      "category": "exact",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-backup-restore-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-backup-restore-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-backup-restore-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-csrf-cookie-exact",
+      "category": "exact",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-csrf-cookie-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-csrf-cookie-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-csrf-cookie-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-message-retry-exact",
+      "category": "exact",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-message-retry-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-message-retry-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-message-retry-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-embedding-profile-exact",
+      "category": "exact",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.10646464774659967,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-embedding-profile-03"
+      ]
+    },
+    {
+      "query_id": "q-embedding-profile-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.31939394323979897,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-embedding-profile-02"
+      ]
+    },
+    {
+      "query_id": "q-embedding-profile-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-embedding-profile-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.10646464774659967,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-embedding-profile-03"
+      ]
+    },
+    {
+      "query_id": "q-summary-cache-exact",
+      "category": "exact",
+      "precision": 0.4,
+      "recall": 0.6666666666666666,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.5766666455144387,
+      "average_precision": 0.6666666666666666,
+      "returned_ids": [
+        "m-summary-cache-03",
+        "m-summary-cache-01"
+      ]
+    },
+    {
+      "query_id": "q-summary-cache-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.31939394323979897,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-summary-cache-02"
+      ]
+    },
+    {
+      "query_id": "q-summary-cache-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-summary-cache-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.4,
+      "recall": 0.6666666666666666,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.5766666455144387,
+      "average_precision": 0.6666666666666666,
+      "returned_ids": [
+        "m-summary-cache-03",
+        "m-summary-cache-01"
+      ]
+    },
+    {
+      "query_id": "q-owner-lock-exact",
+      "category": "exact",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.10646464774659967,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-owner-lock-03"
+      ]
+    },
+    {
+      "query_id": "q-owner-lock-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.31939394323979897,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-owner-lock-02"
+      ]
+    },
+    {
+      "query_id": "q-owner-lock-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-owner-lock-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-read-receipt-exact",
+      "category": "exact",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.10646464774659967,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-read-receipt-03"
+      ]
+    },
+    {
+      "query_id": "q-read-receipt-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.31939394323979897,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-read-receipt-02"
+      ]
+    },
+    {
+      "query_id": "q-read-receipt-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-read-receipt-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.10646464774659967,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-read-receipt-03"
+      ]
+    },
+    {
+      "query_id": "q-ai-privacy-exact",
+      "category": "exact",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.10646464774659967,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-ai-privacy-03"
+      ]
+    },
+    {
+      "query_id": "q-ai-privacy-paraphrase",
+      "category": "paraphrase",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.31939394323979897,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-ai-privacy-02"
+      ]
+    },
+    {
+      "query_id": "q-ai-privacy-question",
+      "category": "question",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-ai-privacy-ambiguous",
+      "category": "ambiguous",
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "ndcg": 0.10646464774659967,
+      "average_precision": 0.3333333333333333,
+      "returned_ids": [
+        "m-ai-privacy-03"
+      ]
+    },
+    {
+      "query_id": "q-negative-01",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-02",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-03",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-04",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-05",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-06",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-07",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-08",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-09",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-10",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-11",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    },
+    {
+      "query_id": "q-negative-12",
+      "category": "negative",
+      "precision": 0.0,
+      "recall": 0.0,
+      "reciprocal_rank": 0.0,
+      "ndcg": 0.0,
+      "average_precision": 0.0,
+      "returned_ids": []
+    }
+  ]
+}

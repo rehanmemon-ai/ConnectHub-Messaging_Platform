@@ -1,0 +1,3 @@
+# ADR 006: Durable embedding jobs
+
+**Context.** External calls can fail after message persistence and must never roll back chat. **Options.** Inline embedding, volatile tasks, or PostgreSQL jobs. **Decision.** Commit messages independently, then process explicitly eligible profiled jobs with `SKIP LOCKED`, bounded retry/backoff, periodic stale recovery, and terminal failure state. **Consequences.** Reliable local operation without another queue service, at the cost of polling and one job per message/profile limitation. **Evidence.** embedding models, worker service, migration 0003, and failure-recovery tests. **Revisit when.** Throughput or multi-service ownership requires a dedicated broker/outbox architecture.

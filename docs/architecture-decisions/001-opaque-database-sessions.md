@@ -1,0 +1,3 @@
+# ADR 001: Opaque database sessions
+
+**Context.** Logout, revocation, expiry, and WebSocket authorization must take effect from server state. **Options.** Self-contained JWTs, opaque database sessions, or a managed identity provider. **Decision.** Issue high-entropy opaque cookies, store only SHA-256 digests and expiry in PostgreSQL, and require session-bound CSRF proof for browser mutations. **Consequences.** Immediate revocation and simple auditability cost a database lookup and session cleanup. **Evidence.** `auth_sessions`, identity service, and authenticated REST/WebSocket tests. **Revisit when.** Federated identity or very high read scale justifies a managed provider or carefully designed token exchange.

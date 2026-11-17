@@ -1,0 +1,3 @@
+# ADR 002: Membership-row locking
+
+**Context.** Message sends and owner mutations can race with membership removal. **Options.** Optimistic checks, application mutexes, serializable transactions, or row locks. **Decision.** Lock the relevant PostgreSQL membership row inside each state-changing transaction. **Consequences.** Correct ordering across API connections with limited lock contention; deadlock-safe lock ordering must be preserved. **Evidence.** `lock_membership_for_update`, messaging/room services, and PostgreSQL concurrency tests. **Revisit when.** Cross-region writes or sustained contention requires a new consistency model.

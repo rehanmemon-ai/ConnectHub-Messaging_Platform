@@ -1,0 +1,3 @@
+# ADR 003: Single-process real-time manager
+
+**Context.** WebSocket connections, presence, queues, and broadcasts are held in memory. **Options.** One process, shared Redis/pub-sub, or a dedicated gateway. **Decision.** Deploy exactly one backend worker for the current pilot. **Consequences.** Low operational complexity but no horizontal scale or cross-process broadcast; restart disconnects sockets and clients reconnect. **Evidence.** `realtime/manager.py`, deployment config, and E2E tests. **Revisit when.** Load or availability requires more than one process; add shared broadcast, presence, and rate-limit coordination before scaling.
