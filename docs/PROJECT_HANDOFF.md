@@ -1,5 +1,16 @@
 # ConnectHub Project Handoff
 
+## Current Render frontend deployment preparation — 2026-11-17
+
+- Repository alignment: branch `main`, `HEAD` and `origin/main` both at `3e6d2e6`; no commit or push was performed.
+- Backend target: `https://connecthub-api-77hd.onrender.com`.
+- `frontend/deploy/nginx.conf` now preserves browser same-origin paths for `/api/`, `/health/`, and `/ws` while forwarding each unchanged path to the HTTPS backend. It sends the Render backend hostname as upstream `Host` and TLS SNI, explicitly preserves the browser `Origin`, forwards client/X-Forwarded information, and retains WebSocket upgrade semantics with 120-second read/send timeouts.
+- Upstream certificate verification is enabled against Alpine's `/etc/ssl/certs/ca-certificates.crt`; `frontend/Dockerfile` explicitly installs `ca-certificates`. Nginx still listens on and exposes port 8080.
+- Frontend verification: ESLint PASS, TypeScript PASS, Vitest PASS (17 tests), and Vite production build PASS (34 modules).
+- Static proxy assertions PASS, including removal of every `http://backend:8000` reference. Native Nginx syntax validation and Docker image build are **BLOCKED / NOT RUN** because the installed Docker client cannot reach the Docker Desktop Linux daemon.
+- The final Render frontend URL is still unknown. The owner must set frontend `PORT=8080`, then add the exact deployed HTTPS frontend origin to backend `ALLOWED_ORIGINS` and redeploy/restart the backend before authentication or WebSockets can pass Origin validation. Do not guess this value.
+- Pre-existing untracked `connection_string.txt` was not read, changed, staged, or exposed. Treat it as potentially sensitive and keep it out of Git.
+
 ## 1. Project identity and status
 
 - Repository: `D:\_Rehan\Project_Python_Chat_system`
