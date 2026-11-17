@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     ai_enabled: bool = False
     ai_provider: Literal["gemini"] = "gemini"
     ai_api_key: SecretStr | None = None
-    ai_text_model: str = "gemini-2.5-flash-lite"
+    ai_text_model: str = "gemini-3.5-flash-lite"
     ai_embedding_model: str = "gemini-embedding-001"
     ai_embedding_dimensions: int = Field(default=768, ge=128, le=3072)
     ai_embedding_profile_version: str = "retrieval-v1"

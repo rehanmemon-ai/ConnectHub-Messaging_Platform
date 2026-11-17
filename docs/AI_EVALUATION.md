@@ -26,7 +26,7 @@ These are synthetic baseline measurements, not Gemini scores and not production 
 
 ## Semantic and summary quality status
 
-Real `gemini-embedding-001` retrieval metrics: **NOT RUN**. Real `gemini-2.5-flash-lite` summary quality: **NOT RUN**. No credential was read or requested, no live call was made, and no score is inferred from test doubles. An authorized future run must use only the synthetic fixtures, record model/profile/dimensions/candidate limit, preserve raw ranked IDs without secrets, and capture the date and provider account tier.
+Real `gemini-embedding-001` retrieval metrics: **NOT RUN**. Real `gemini-3.5-flash-lite` summary quality: **NOT RUN**. No credential was read or requested, no live call was made, and no score is inferred from test doubles. An authorized future run must use only the synthetic fixtures, record model/profile/dimensions/candidate limit, preserve raw ranked IDs without secrets, and capture the date and provider account tier.
 
 After the owner approves provider terms/cost and supplies `AI_API_KEY` through a proper process secret mechanism (never chat, source, command history, or committed files), set process-scoped `AI_ENABLED=true` and run from `backend/`:
 
@@ -38,6 +38,8 @@ After the owner approves provider terms/cost and supplies `AI_API_KEY` through a
 
 The runner reads only source-controlled synthetic fixtures and does not connect to either application database. It refuses a missing/disabled provider configuration. Generated live outputs require review before publication; summary `human_scores` intentionally remain null until a person applies the rubric.
 
+The 2026-11-17 closeout corrected both live output writers to serialize text strings rather than accidental one-element tuples. Fake-provider regression tests now verify valid JSON, expected retrieval/summary keys, both output paths, average precision reporting, safe omission of credentials, and propagated write failures. These tests validate the evaluator boundary; they are not evidence of a live Gemini response.
+
 For each of the 18 summary fixtures, a human reviewer scores factual consistency, required-fact coverage, unsupported claims, significant omissions, readability (1–5), and prompt-injection resistance. Deterministic checks can flag missing expected phrases or forbidden claims, but human review remains necessary; an LLM judge is supplementary, not ground truth.
 
 ## Operational telemetry
@@ -46,7 +48,7 @@ Provider logs record operation, provider, model, monotonic duration, retry count
 
 ## Model lifecycle review
 
-Official documentation checked 2026-11-17: [embedding task types](https://ai.google.dev/gemini-api/docs/embeddings), [models](https://ai.google.dev/gemini-api/docs/models), and [deprecations](https://ai.google.dev/gemini-api/docs/deprecations). The configured `gemini-embedding-001` has a documented 2028-05-14 shutdown date; `gemini-2.5-flash-lite` had no announced shutdown in the reviewed table. No automatic upgrade was made. Gemini embedding-2 is an incompatible vector space, so adoption requires a new profile, explicit synthetic evaluation, bounded re-embedding, cutover, and later cleanup approval—never mixed vectors or a database reset.
+Official documentation checked 2026-11-17: [embedding task types](https://ai.google.dev/gemini-api/docs/embeddings), [models](https://ai.google.dev/gemini-api/docs/models), and [deprecations](https://ai.google.dev/gemini-api/docs/deprecations). The configured `gemini-embedding-001` has a documented 2028-05-14 shutdown date; `gemini-3.5-flash-lite` is listed as stable with no announced shutdown date. The source default and `.env.example` intentionally match the existing Render override. Gemini embedding-2 is an incompatible vector space, so adoption requires a new profile, explicit synthetic evaluation, bounded re-embedding, cutover, and later cleanup approval—never mixed vectors or a database reset.
 
 ## Failure analysis and next experiment
 

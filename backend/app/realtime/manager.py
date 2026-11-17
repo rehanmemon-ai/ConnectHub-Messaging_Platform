@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from fastapi import WebSocket
+from starlette.websockets import WebSocketDisconnect
 
 
 @dataclass(slots=True)
@@ -126,9 +127,13 @@ class ConnectionManager:
         current = asyncio.current_task()
         if connection.writer is not None and connection.writer is not current:
             connection.writer.cancel()
+            try:
+                await connection.writer
+            except asyncio.CancelledError:
+                pass
         try:
             await connection.websocket.close(code=code, reason=reason)
-        except RuntimeError:
+        except (RuntimeError, WebSocketDisconnect):
             pass
         return remaining_online
 
@@ -185,6 +190,10 @@ class ConnectionManager:
         previous = self._typing_tasks.pop(key, None)
         if previous is not None:
             previous.cancel()
+            try:
+                await previous
+            except asyncio.CancelledError:
+                pass
         await self.broadcast_room(room_id, event)
 
         async def expire() -> None:
@@ -199,7 +208,8 @@ class ConnectionManager:
                     },
                 )
             finally:
-                self._typing_tasks.pop(key, None)
+                if self._typing_tasks.get(key) is asyncio.current_task():
+                    self._typing_tasks.pop(key, None)
 
         self._typing_tasks[key] = asyncio.create_task(expire())
 
@@ -207,6 +217,10 @@ class ConnectionManager:
         task = self._typing_tasks.pop((connection.id, room_id), None)
         if task is not None:
             task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
             await self.broadcast_room(
                 room_id,
                 {

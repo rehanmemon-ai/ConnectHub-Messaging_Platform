@@ -11,7 +11,13 @@ from app.ai.provider import GeminiProvider, embedding_profile
 from app.ai.service import cosine_similarity
 from app.core.config import Settings
 from evals.dataset import DATASET_VERSION, MESSAGES, QUERIES
-from evals.metrics import ndcg_at_k, precision_at_k, recall_at_k, reciprocal_rank_at_k
+from evals.metrics import (
+    average_precision_at_k,
+    ndcg_at_k,
+    precision_at_k,
+    recall_at_k,
+    reciprocal_rank_at_k,
+)
 from evals.summary_dataset import DATASET_VERSION as SUMMARY_VERSION
 from evals.summary_dataset import FIXTURES
 
@@ -48,12 +54,13 @@ async def retrieval(settings: Settings, output: Path, k: int, candidate_limit: i
                 "recall": recall_at_k(ranked, relevant, k),
                 "reciprocal_rank": reciprocal_rank_at_k(ranked, relevant, k),
                 "ndcg": ndcg_at_k(ranked, query.relevance, k),
+                "average_precision": average_precision_at_k(ranked, relevant, k),
                 "returned_ids": ranked[:k],
             }
         )
     metrics = {
         name: statistics.fmean(float(row[name]) for row in rows)
-        for name in ("precision", "recall", "reciprocal_rank", "ndcg")
+        for name in ("precision", "recall", "reciprocal_rank", "ndcg", "average_precision")
     }
     rendered = (
         json.dumps(
@@ -73,7 +80,7 @@ async def retrieval(settings: Settings, output: Path, k: int, candidate_limit: i
             },
             indent=2,
         )
-        + "\n",
+        + "\n"
     )
     await asyncio.to_thread(output.write_text, rendered, encoding="utf-8")
 
@@ -108,7 +115,7 @@ async def summaries(settings: Settings, output: Path) -> None:
             },
             indent=2,
         )
-        + "\n",
+        + "\n"
     )
     await asyncio.to_thread(output.write_text, rendered, encoding="utf-8")
 

@@ -1,6 +1,8 @@
 # ConnectHub Deployment Guide
 
-Status: **portable deployment path IMPLEMENTED; public deployment NOT AUTHORIZED / NOT RUN**
+Status: **public portfolio deployment active; this closeout made no deployment changes**
+
+Current services: frontend <https://connecthub-web-w89e.onrender.com>, backend <https://connecthub-api-77hd.onrender.com>, and Neon PostgreSQL in Singapore. Read-only checks on 2026-11-17 returned HTTP 200 for backend readiness, the frontend root, and frontend-proxied readiness. Render free-tier sleep/cold starts and ephemeral service filesystems remain portfolio limitations; PostgreSQL is the durable store.
 
 ## Supported topology
 

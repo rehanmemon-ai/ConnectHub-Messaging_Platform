@@ -1,21 +1,34 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import path from "node:path";
 
 const password = "Correct-Horse-Battery-44";
+const portfolioRoot = process.env.CONNECTHUB_PORTFOLIO_ASSETS;
 
-async function registerAndLogin(page: Page, username: string): Promise<void> {
+async function capture(page: Page, name: string): Promise<void> {
+  if (portfolioRoot) {
+    await page.screenshot({
+      path: path.join(portfolioRoot, "screenshots", `${name}.png`),
+      fullPage: true,
+    });
+  }
+}
+
+async function registerAndLogin(page: Page, username: string, evidencePrefix?: string): Promise<void> {
   await page.goto("/register");
+  if (evidencePrefix) await capture(page, `${evidencePrefix}-registration`);
   await page.getByLabel("Display name").fill(`${username} display`);
   await page.getByLabel("Username").fill(username);
   await page.getByLabel("Email").fill(`${username}@example.test`);
   await page.getByLabel(/^Password/).fill(password);
-  await page.getByLabel("Confirm password").fill(password);
+  await page.getByRole("textbox", { name: "Confirm password" }).fill(password);
   await page.getByRole("button", { name: "Create account" }).click();
   await expect(page.getByText("Account created")).toBeVisible();
   await page.getByLabel("Username or email").fill(username);
-  await page.getByLabel("Password").fill(password);
+  await page.getByRole("textbox", { name: "Password" }).fill(password);
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page.getByRole("heading", { name: /Good .*?/ })).toBeVisible();
+  if (evidencePrefix) await capture(page, `${evidencePrefix}-dashboard`);
 }
 
 async function createRoom(page: Page, name: string, visibility: "Public" | "Private"): Promise<string> {
@@ -29,29 +42,35 @@ async function createRoom(page: Page, name: string, visibility: "Public" | "Priv
 }
 
 test("real multi-user public and private room journeys", async ({ browser }) => {
-  const ownerContext = await browser.newContext();
+  const ownerContext = await browser.newContext(portfolioRoot ? {
+    viewport: { width: 1280, height: 720 },
+  } : undefined);
   const memberContext = await browser.newContext();
   const outsiderContext = await browser.newContext();
   const owner = await ownerContext.newPage();
   const member = await memberContext.newPage();
   const outsider = await outsiderContext.newPage();
 
-  await registerAndLogin(owner, "e2e_owner");
+  await registerAndLogin(owner, "e2e_owner", "01-owner");
   const publicRoomId = await createRoom(owner, "E2E public room", "Public");
   await owner.getByLabel("Message E2E public room").fill("owner persisted message");
   await owner.getByRole("button", { name: "Send message" }).click();
   await expect(owner.getByRole("article").getByText("owner persisted message")).toBeVisible();
+  await capture(owner, "03-public-room-owner-message");
 
   await registerAndLogin(member, "e2e_member");
   await member.getByRole("link", { name: "Discover" }).click();
   await member.getByLabel("Search rooms").fill("E2E public room");
   await member.getByRole("button", { name: "Search" }).click();
+  await capture(member, "04-room-discovery");
   await member.getByRole("button", { name: "Join room" }).click();
   await member.getByRole("link", { name: "Open" }).click();
   await expect(member.getByText("owner persisted message")).toBeVisible();
   await member.getByLabel("Message E2E public room").fill("member realtime message");
   await member.getByRole("button", { name: "Send message" }).click();
   await expect(owner.getByText("member realtime message")).toBeVisible();
+  await capture(owner, "05-realtime-message-owner");
+  await capture(member, "06-realtime-message-member");
 
   const duplicateIds = await member.evaluate(async ({ roomId }) => {
     const csrf = document.cookie.split("; ").find((item) => item.startsWith("connecthub_csrf="))?.split("=")[1];
@@ -72,12 +91,15 @@ test("real multi-user public and private room journeys", async ({ browser }) => 
   await owner.getByLabel("Username").fill("e2e_member");
   await owner.getByRole("button", { name: "Send invitation" }).click();
   await expect(owner.getByText("@e2e_member", { exact: true })).toBeVisible();
+  await capture(owner, "07-private-room-invitation-owner");
 
   await member.getByRole("link", { name: "Invitations" }).click();
   await expect(member.getByRole("heading", { name: "E2E private room" })).toBeVisible();
+  await capture(member, "08-private-room-invitation-member");
   await member.getByRole("button", { name: "Accept" }).click();
   await member.waitForURL(`/app/rooms/${privateRoomId}`);
   await expect(member.getByRole("heading", { name: "E2E private room" })).toBeVisible();
+  await capture(member, "09-private-room-accepted");
   await member.reload();
   await expect(member.getByRole("heading", { name: "E2E private room" })).toBeVisible();
 
@@ -94,6 +116,7 @@ test("real multi-user public and private room journeys", async ({ browser }) => 
   await owner.getByRole("button", { name: "Send message" }).click();
   await owner.getByRole("button", { name: /Summarize conversation/ }).click();
   await expect(owner.getByText(/AI summaries are not configured/)).toBeVisible();
+  await capture(owner, "10-ai-disabled-safe-state");
 
   await ownerContext.close();
   await memberContext.close();
@@ -103,6 +126,7 @@ test("real multi-user public and private room journeys", async ({ browser }) => 
 test("session restoration, exact search, responsive navigation, and critical accessibility", async ({ page }) => {
   await registerAndLogin(page, "e2e_accessible");
   await createRoom(page, "E2E accessible room", "Public");
+  const roomUrl = page.url();
   await page.getByLabel("Message E2E accessible room").fill("searchable persistence marker");
   await page.getByRole("button", { name: "Send message" }).click();
   await page.reload();
@@ -111,6 +135,7 @@ test("session restoration, exact search, responsive navigation, and critical acc
   await page.getByLabel("Search query").fill("persistence marker");
   await page.getByRole("button", { name: "Search messages" }).click();
   await expect(page.getByText("searchable persistence marker")).toBeVisible();
+  await capture(page, "11-exact-message-search");
 
   const desktopAudit = await new AxeBuilder({ page }).analyze();
   expect(desktopAudit.violations.filter((item) => ["critical", "serious"].includes(item.impact ?? ""))).toEqual([]);
@@ -119,8 +144,36 @@ test("session restoration, exact search, responsive navigation, and critical acc
   await expect(page.getByRole("button", { name: "Open navigation" })).toBeVisible();
   await page.getByRole("button", { name: "Open navigation" }).click();
   await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
+  await capture(page, "12-mobile-navigation");
   const mobileAudit = await new AxeBuilder({ page }).analyze();
   expect(mobileAudit.violations.filter((item) => ["critical", "serious"].includes(item.impact ?? ""))).toEqual([]);
+
+  const favicon = await page.request.get("/favicon.svg");
+  expect(favicon.ok()).toBe(true);
+  for (const viewport of [
+    { width: 320, height: 700 }, { width: 360, height: 800 },
+    { width: 390, height: 844 }, { width: 430, height: 932 },
+    { width: 768, height: 1024 }, { width: 1024, height: 768 },
+    { width: 1366, height: 768 }, { width: 1920, height: 1080 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto(roomUrl);
+    await expect(page.getByLabel("Message E2E accessible room")).toBeVisible();
+    const layout = await page.evaluate(() => {
+      const composer = document.querySelector(".composer-area")?.getBoundingClientRect();
+      const history = document.querySelector(".message-scroll")?.getBoundingClientRect();
+      return {
+        composerBottom: composer?.bottom ?? Number.POSITIVE_INFINITY,
+        historyHeight: history?.height ?? 0,
+        overflow: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+    expect(layout.composerBottom).toBeLessThanOrEqual(viewport.height + 1);
+    expect(layout.historyHeight).toBeGreaterThan(0);
+    expect(layout.overflow).toBe(false);
+    if (viewport.width === 320) await capture(page, "13-mobile-chat-320x700");
+    if (viewport.width === 1366) await capture(page, "14-desktop-chat-1366x768");
+  }
 });
 
 test("bounded authenticated HTTP load smoke remains responsive", async ({ page }) => {

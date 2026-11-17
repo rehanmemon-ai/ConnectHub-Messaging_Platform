@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ConnectHub">
+  <rect width="64" height="64" rx="16" fill="#102b2a"/>
+  <path d="M14 16h36v25H26L14 51V16Z" fill="none" stroke="#31c4ad" stroke-linejoin="round" stroke-width="5"/>
+  <path d="M23 25h18M23 33h12" stroke="#f4f7fb" stroke-linecap="round" stroke-width="4"/>
+</svg>

@@ -2,6 +2,8 @@
 
 ConnectHub is a Real-Time Multi-Room Messaging Platform. Its approved modular-monolith stack is Python/FastAPI, PostgreSQL, SQLAlchemy, Alembic, React, TypeScript, Vite, and Tailwind CSS.
 
+The approved portfolio deployment is one Render backend process, a separate Render/Nginx frontend preserving same-origin `/api`, `/health`, and `/ws` traffic, and Neon PostgreSQL. Do not introduce multi-worker realtime deployment without an explicit cross-process coordination design.
+
 ## Boundaries
 
 - Keep exactly five initial entities: users, auth_sessions, rooms, room_memberships, and messages.
@@ -17,6 +19,7 @@ ConnectHub is a Real-Time Multi-Room Messaging Platform. Its approved modular-mo
 - Never expose secrets or trust client-provided sender identity, roles, ownership, IDs, or timestamps.
 - Enforce authentication and authorization in the backend and return safe errors.
 - Preserve the session, CSRF, Origin, deletion, and logging requirements in `docs/security-design.md`.
+- Keep AI optional and disabled by default. Never send private conversations to a provider without explicit owner/user approval; never mix incompatible embedding profiles or expose provider keys to the frontend.
 
 ## Testing and Git
 

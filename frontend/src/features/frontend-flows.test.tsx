@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import App from "../App";
+import { isNearBottom, preservedScrollTop } from "./chat/scroll";
 import type { Message, Notification } from "../types/api";
 import { apiError, currentUser, FakeWebSocket, installFetch, installWebSocket, json, room } from "../test-utils";
 
@@ -77,6 +78,35 @@ describe("room and realtime flows", () => {
     expect(await screen.findByText("Delivered live")).toBeInTheDocument();
     socket.serverMessage({ type: "message.created", message: { ...unsafeMessage, id: "30000000-0000-4000-8000-000000000003", room_id: "20000000-0000-4000-8000-000000000999", content: "Wrong room" } });
     expect(screen.queryByText("Wrong room")).not.toBeInTheDocument();
+  });
+
+  it("offers a jump control instead of stealing scroll position for new messages", async () => {
+    roomFetch();
+    render(<App />);
+    await screen.findByRole("heading", { name: room.name });
+    const scroller = document.querySelector(".message-scroll") as HTMLDivElement;
+    Object.defineProperties(scroller, {
+      scrollHeight: { configurable: true, value: 1_000 },
+      clientHeight: { configurable: true, value: 400 },
+    });
+    await new Promise((resolve) => window.setTimeout(resolve, 25));
+    scroller.scrollTop = 100;
+    fireEvent.scroll(scroller);
+    await waitFor(() => expect(screen.queryByRole("button", { name: "Jump to latest" })).not.toBeInTheDocument());
+    const socket = FakeWebSocket.instances[0];
+    socket.open();
+    socket.serverMessage({ type: "message.created", message: { ...unsafeMessage, id: "30000000-0000-4000-8000-000000000004", content: "New while reading history" } });
+    const jump = await screen.findByRole("button", { name: "Jump to latest" });
+    const scrollTo = vi.spyOn(scroller, "scrollTo");
+    fireEvent.click(jump);
+    expect(scrollTo).toHaveBeenCalledWith({ top: 1_000, behavior: "smooth" });
+    expect(screen.queryByRole("button", { name: "Jump to latest" })).not.toBeInTheDocument();
+  });
+
+  it("calculates near-bottom following and preserves position when prepending history", () => {
+    expect(isNearBottom({ scrollHeight: 1_000, scrollTop: 520, clientHeight: 400 })).toBe(true);
+    expect(isNearBottom({ scrollHeight: 1_000, scrollTop: 100, clientHeight: 400 })).toBe(false);
+    expect(preservedScrollTop(75, 900, 1_250)).toBe(425);
   });
 
   it("keeps the idempotency key when a failed message is retried", async () => {

@@ -1,5 +1,21 @@
 # ConnectHub Project Handoff
 
+## Authoritative current snapshot — 2026-11-17 final QA closeout
+
+This section supersedes contradictory historical status statements later in this append-only handoff. Historical milestone text is retained for traceability.
+
+- Repository: public GitHub `rehanmemon-ai/ConnectHub-Messaging_Platform`; branch `main`; `HEAD` and `origin/main` are `04877d0f972fc85a096be989c9f1cd56fafb96c8` before the uncommitted closeout changes.
+- Deployment: frontend <https://connecthub-web-w89e.onrender.com>, backend <https://connecthub-api-77hd.onrender.com>, Neon PostgreSQL in Singapore, Render/Nginx same-origin proxy, one backend process.
+- Public read-only smoke: backend readiness, frontend root, and frontend-proxied readiness returned HTTP 200. No deployment was changed. The new favicon is not yet deployed; public `/favicon.svg` currently falls back to the SPA HTML.
+- Final local gates: 97 backend tests; 21 Vitest tests; 3/3 Playwright scenarios; Ruff, formatting, `pip check`, ESLint, TypeScript, Vite build, Alembic drift, and production npm audit pass. A fresh full npm audit reports 12 high findings in development tooling; its listed fixes require incompatible major downgrades, so no blind downgrade was applied. One upstream Starlette/httpx deprecation warning remains.
+- Corrected locally: chat follow/jump/history positioning, viewport-safe composer, accessible password visibility, connection/read-receipt contrast, favicon/metadata, deterministic WebSocket task cleanup, and Gemini evaluator string serialization plus average precision.
+- AI: normal chat is independent of Gemini; `AI_ENABLED=false` remains the default. Configured source defaults are `gemini-3.5-flash-lite`, `gemini-embedding-001`, and 768 dimensions. This matches the existing Render override; real Gemini retrieval and summary quality are **NOT RUN** because no approved process key was available.
+- Portfolio evidence: genuine synthetic E2E screenshots are outside Git under `D:\_Rehan\ConnectHub-Portfolio-Assets`. Playwright video capture was attempted but its bundled FFmpeg executable was absent; no video or MP4 was produced and no encoder was downloaded.
+- Safety: no `.env` or private connection file was read or printed; no production database write/migration/test occurred; no key was accessed; no Render setting changed; no commit, push, or deploy occurred.
+- Review documents: `QA_TEST_PLAN.md`, `QA_RESULTS.md`, `FEATURE_EVIDENCE_MATRIX.md`, and `portfolio/CONNECTHUB_CASE_STUDY.md`. Older claims below such as “no commits,” “no remote,” “frontend URL unknown,” or “public production not run” describe earlier milestones and are superseded by this snapshot.
+
+The local working tree intentionally contains the owner-reviewable source, tests, and documentation listed by `git status`; nothing is staged. The live services continue to run the previously deployed commit until the owner reviews and deploys these changes.
+
 ## Current Render frontend deployment preparation — 2026-11-17
 
 - Repository alignment: branch `main`, `HEAD` and `origin/main` both at `3e6d2e6`; no commit or push was performed.

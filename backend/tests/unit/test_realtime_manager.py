@@ -1,19 +1,25 @@
 import asyncio
 import uuid
 
+import pytest
+from starlette.websockets import WebSocketDisconnect
+
 from app.realtime.manager import ConnectionManager
 
 
 class FakeWebSocket:
-    def __init__(self) -> None:
+    def __init__(self, close_error: Exception | None = None) -> None:
         self.events: list[dict[str, object]] = []
         self.closed: tuple[int, str] | None = None
+        self.close_error = close_error
 
     async def send_json(self, event: dict[str, object]) -> None:
         self.events.append(event)
 
     async def close(self, code: int, reason: str) -> None:
         self.closed = (code, reason)
+        if self.close_error is not None:
+            raise self.close_error
 
 
 async def test_multi_connection_presence_and_room_isolation() -> None:
@@ -107,3 +113,39 @@ async def test_typing_expires_and_slow_client_is_disconnected() -> None:
     assert not await manager.enqueue(slow, {"type": "overflow"})
     assert slow_socket.closed == (1013, "slow_client")
     await manager.shutdown()
+
+
+async def test_disconnect_is_idempotent_and_tolerates_an_already_closed_socket() -> None:
+    manager = ConnectionManager()
+    socket = FakeWebSocket(WebSocketDisconnect(code=1006))
+    connection = await manager.register(
+        socket,
+        user_id=uuid.uuid4(),
+        session_id=uuid.uuid4(),
+        queue_size=10,
+        connection_limit=1,
+    )
+    room_id = uuid.uuid4()
+    await manager.subscribe(connection, room_id)
+    await manager.start_typing(connection, room_id, {"type": "typing.started"}, 60)
+
+    assert not await manager.disconnect(connection)
+    assert not await manager.disconnect(connection)
+    assert await manager.user_connection_count(connection.user_id) == 0
+    assert connection.writer is not None and connection.writer.done()
+    assert manager._typing_tasks == {}
+
+
+async def test_disconnect_does_not_hide_unexpected_close_errors() -> None:
+    manager = ConnectionManager()
+    connection = await manager.register(
+        FakeWebSocket(ValueError("programmer error")),
+        user_id=uuid.uuid4(),
+        session_id=uuid.uuid4(),
+        queue_size=10,
+        connection_limit=1,
+    )
+
+    with pytest.raises(ValueError, match="programmer error"):
+        await manager.disconnect(connection)
+    assert await manager.user_connection_count(connection.user_id) == 0

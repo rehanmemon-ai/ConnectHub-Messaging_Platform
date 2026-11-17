@@ -80,7 +80,9 @@ describe("authentication experience", () => {
     fireEvent.change(screen.getByLabelText(/username/i), { target: { value: "rehan" } });
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: "rehan@example.test" } });
     fireEvent.change(screen.getAllByLabelText(/password/i)[0], { target: { value: "correct horse battery staple" } });
-    fireEvent.change(screen.getByLabelText(/confirm password/i), { target: { value: "correct horse battery staple" } });
+    fireEvent.change(screen.getByLabelText(/confirm password/i, { selector: "input" }), {
+      target: { value: "correct horse battery staple" },
+    });
     fireEvent.click(screen.getByRole("button", { name: /create account/i }));
     expect(await screen.findByText(/account created\. sign in/i)).toBeInTheDocument();
     expect(history.state).toBeTruthy();

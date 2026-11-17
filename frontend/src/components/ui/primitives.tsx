@@ -7,8 +7,9 @@ export function Button({ variant = "primary", busy, className = "", children, ..
   return <button className={`button button-${variant} ${className}`} disabled={busy || props.disabled} {...props}>{busy ? <span className="spinner" aria-hidden="true"/> : null}{children}</button>;
 }
 
-export function Field({ label, error, hint, children }: { label: string; error?: string; hint?: string; children: React.ReactNode }) {
-  return <label className="field"><span className="field-label">{label}</span>{children}{error ? <span className="field-error" role="alert">{error}</span> : hint ? <span className="field-hint">{hint}</span> : null}</label>;
+export function Field({ label, error, hint, children, controlId }: { label: string; error?: string; hint?: string; children: React.ReactNode; controlId?: string }) {
+  const content = <><span className="field-label">{label}</span>{children}{error ? <span className="field-error" role="alert">{error}</span> : hint ? <span className="field-hint">{hint}</span> : null}</>;
+  return controlId ? <div className="field"><label className="field-label" htmlFor={controlId}>{label}</label>{children}{error ? <span className="field-error" role="alert">{error}</span> : hint ? <span className="field-hint">{hint}</span> : null}</div> : <label className="field">{content}</label>;
 }
 
 export function Avatar({ name, size = "md" }: { name: string; size?: "sm" | "md" | "lg" }) {

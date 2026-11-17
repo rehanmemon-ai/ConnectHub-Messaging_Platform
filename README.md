@@ -2,7 +2,7 @@
 
 ConnectHub is an end-to-end real-time messaging platform with secure session-based authentication, persistent WebSocket communication, AI-powered conversation summaries, and embedding-based semantic search. It is designed as a defensible AI application-engineering portfolio: the provider boundary, asynchronous job recovery, privacy gates, and retrieval evaluation are visible and reproducible rather than hidden behind a demo.
 
-> Local application verification is complete. AI remains disabled by default. Controlled staging is a conditional owner decision; public production has not been authorized or run.
+> Local application verification is complete. The portfolio deployment is public at [connecthub-web-w89e.onrender.com](https://connecthub-web-w89e.onrender.com), backed by a separate Render API service and Neon PostgreSQL. AI remains disabled by default; free-tier sleep/cold starts and the single-process realtime constraint still apply.
 
 The central engineering challenge is coordinating durable PostgreSQL state with process-local real-time delivery while making optional external AI processing explicit, bounded, version-compatible, and measurable.
 
@@ -14,8 +14,10 @@ The central engineering challenge is coordinating durable PostgreSQL state with 
 - [Security review](docs/SECURITY_REVIEW.md) and [privacy/data flow](docs/PRIVACY_DATA_FLOW.md)
 - [Demo script](docs/DEMO_SCRIPT.md), [interview preparation](docs/INTERVIEW_PREP.md), and [project freeze](docs/PROJECT_FREEZE.md)
 - [Current handoff](docs/PROJECT_HANDOFF.md) and [release readiness](docs/RELEASE_READINESS.md)
+- [QA plan](docs/QA_TEST_PLAN.md), [results](docs/QA_RESULTS.md), and [feature evidence](docs/FEATURE_EVIDENCE_MATRIX.md)
+- [Engineering case study and résumé entry](docs/portfolio/CONNECTHUB_CASE_STUDY.md)
 
-Actual portfolio screenshots were **NOT CAPTURED in the AI-evaluation milestone** because the local services were intentionally left stopped and no disposable demo database was authorized. The UI was previously verified through three authenticated Playwright scenarios; screenshot capture remains an owner-run demo step and is not represented by mockups.
+Eight selected screenshots from fictional users in the isolated local E2E database are included in [the GitHub-visible portfolio gallery](docs/portfolio/CONNECTHUB_CASE_STUDY.md#portfolio-assets). The full evidence remains outside Git at `D:\_Rehan\ConnectHub-Portfolio-Assets`. No production conversation or credential is included. Playwright video capture was blocked by its absent FFmpeg binary; the case study supplies an honest storyboard and narration/edit outline instead.
 
 ```mermaid
 flowchart LR
@@ -223,7 +225,7 @@ Vitest mocks REST/WebSocket boundaries. The separate Playwright suite uses the g
 
 The portable single-worker deployment example is `compose.production.example.yml`. Review `docs/RELEASE_READINESS.md`, `docs/SECURITY_REVIEW.md`, `docs/DEPLOYMENT.md`, `docs/OPERATIONS.md`, `docs/BACKUP_RESTORE.md`, and `docs/PRIVACY_DATA_FLOW.md` before any hosting work. No public deployment is performed by the repository setup commands.
 
-Current provider research and the exact approval gates are in `docs/STAGING_OPTIONS.md` and `docs/PRODUCTION_OWNER_ACTIONS.md`. The current recommendation is a paid, one-instance Render Singapore pilot for lowest cost, with DigitalOcean Bangalore plus Managed PostgreSQL as the India-region alternative. These are recommendations only; no provider account or resource has been created.
+The current public portfolio topology is a single-worker Render backend, Render/Nginx frontend, and Neon PostgreSQL. Read-only smoke checks on 2026-11-17 returned HTTP 200 for backend readiness, the frontend root, and frontend-proxied readiness. Review `docs/DEPLOYMENT.md`, `docs/RELEASE_READINESS.md`, and `docs/PROJECT_HANDOFF.md` before changing provider settings. Local changes are not live until the owner reviews and deploys them.
 
 ## Git workflow
 
